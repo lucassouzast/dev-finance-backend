@@ -32,5 +32,4 @@ npm install
 
 1. Copie o arquivo `.env.example` e crie um `.env` com suas credenciais:
 
-```bash
 cp .env.example .env
