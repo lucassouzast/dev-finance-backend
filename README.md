@@ -26,3 +26,11 @@ cd dev-finance-backend
 
 # Instale as dependências
 npm install
+
+
+## Configuração do ambiente
+
+1. Copie o arquivo `.env.example` e crie um `.env` com suas credenciais:
+
+```bash
+cp .env.example .env
