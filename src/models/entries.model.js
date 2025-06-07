@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import User from './Users';
 
 const entrySchema = new mongoose.Schema({
   date: { type: Date, required: true },
