@@ -1,13 +1,25 @@
-import dotenv from 'dotenv';
-import connectDB from './src/config/db.js';
-import app from './src/app.js'; // seu app Express
+// index.js
+import './src/config/env.js';
+import express from 'express';
+import mongoose from 'mongoose';
+import routes from './src/routes/index.js'; // Ajuste se o caminho for diferente
 
-dotenv.config();
 
+const app = express();
 const PORT = process.env.PORT || 3000;
 
-connectDB();
+// Middlewares
+app.use(express.json());
+app.use('/', routes);
 
-app.listen(PORT, () => {
-  console.log(`🚀 Servidor rodando na porta ${PORT}`);
+// Conexão com o MongoDB
+mongoose.connect(process.env.MONGODB_URI)
+.then(() => {
+  console.log('✅ MongoDB conectado');
+  app.listen(PORT, () => {
+    console.log(`🚀 Servidor rodando na porta ${PORT}`);
+  });
+})
+.catch(err => {
+  console.error('❌ Erro ao conectar MongoDB:', err);
 });

@@ -37,6 +37,7 @@ export async function login(req, res) {
 
     res.json({ token });
   } catch (err) {
+    console.log(err);
     res.status(500).json({ error: "Erro ao fazer login" });
   }
 }
