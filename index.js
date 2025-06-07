@@ -1,5 +1,6 @@
 // index.js
 import './src/config/env.js';
+import cors from "cors";
 import express from 'express';
 import mongoose from 'mongoose';
 import routes from './src/routes/index.js'; // Ajuste se o caminho for diferente
@@ -7,6 +8,7 @@ import routes from './src/routes/index.js'; // Ajuste se o caminho for diferente
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+app.use(cors());
 
 // Middlewares
 app.use(express.json());
