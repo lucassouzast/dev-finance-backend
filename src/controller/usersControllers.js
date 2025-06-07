@@ -1,44 +1,44 @@
-const User = require('../models/User');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+import User from '../models/Users.js';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 
 const secret = process.env.JWT_SECRET;
 
-module.exports = {
-  async register(req, res) {
-    const { nome, email, senha } = req.body;
+export async function register(req, res) {
+  const { nome, email, senha } = req.body;
 
-    try {
-      const userExists = await User.findOne({ email });
-      if (userExists) return res.status(400).json({ error: 'Usuário já existe' });
+  try {
+    const userExists = await User.findOne({ email });
+    if (userExists) return res.status(400).json({ error: 'Usuário já existe' });
 
-      const hashedPassword = await bcrypt.hash(senha, 10);
+    const hashedPassword = await bcrypt.hash(senha, 10);
 
-      const user = await User.create({ nome, email, senha: hashedPassword });
 
-      const token = jwt.sign({ id: user._id }, secret, { expiresIn: '7d' });
 
-      res.json({ user: { id: user._id, nome, email }, token });
-    } catch (err) {
-      res.status(500).json({ error: 'Erro ao registrar usuário' });
-    }
-  },
+    const user = await User.create({ nome, email, senha: hashedPassword });
 
-  async login(req, res) {
-    const { email, senha } = req.body;
+    const token = jwt.sign({ id: user._id }, secret, { expiresIn: '7d' });
 
-    try {
-      const user = await User.findOne({ email });
-      if (!user) return res.status(400).json({ error: 'Usuário não encontrado' });
+    res.json({ user: { id: user._id, nome, email }, token });
+  } catch (err) {
+    res.status(500).json({ error: 'Erro ao registrar usuário' });
+  }
+}
 
-      const isPasswordValid = await bcrypt.compare(senha, user.senha);
-      if (!isPasswordValid) return res.status(400).json({ error: 'Senha inválida' });
+export async function login(req, res) {
+  const { email, senha } = req.body;
 
-      const token = jwt.sign({ id: user._id }, secret, { expiresIn: '7d' });
+  try {
+    const user = await User.findOne({ email });
+    if (!user) return res.status(400).json({ error: 'Usuário não encontrado' });
 
-      res.json({ user: { id: user._id, nome: user.nome, email: user.email }, token });
-    } catch (err) {
-      res.status(500).json({ error: 'Erro ao fazer login' });
-    }
-  },
-};
+    const valid = await bcrypt.compare(senha, user.senha);
+    if (!valid) return res.status(400).json({ error: 'Senha inválida' });
+
+    const token = jwt.sign({ id: user._id }, secret, { expiresIn: '7d' });
+
+    res.json({token});
+  } catch (err) {
+    res.status(500).json({ error: 'Erro ao fazer login' });
+  }
+}
