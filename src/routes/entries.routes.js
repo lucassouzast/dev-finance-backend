@@ -1,5 +1,5 @@
 import express from "express";
-import authMiddlewareget from "../middleware/authMiddleware.js";
+import authMiddleware from "../middleware/authMiddleware.js";
 import {
   getAllEntries,
   getEntryById,
@@ -10,10 +10,10 @@ import {
 
 const router = express.Router();
 
-router.get("/", authMiddlewareget, getAllEntries);
-router.get("/:id", authMiddlewareget, getEntryById);
-router.post("/", authMiddlewareget, createEntry);
-router.put("/:id", authMiddlewareget, updateEntry);
-router.delete("/:id", authMiddlewareget, deleteEntry);
+router.get("/", getAllEntries);
+router.get("/:id", getEntryById);
+router.post("/", createEntry);
+router.put("/:id", updateEntry);
+router.delete("/:id", deleteEntry);
 
 export default router;
