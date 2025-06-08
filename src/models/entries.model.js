@@ -5,6 +5,7 @@ const entrySchema = new mongoose.Schema({
   category: { type: String, required: true },
   title: { type: String, required: true },
   value: { type: Number, required: true },
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
 });
 
 const Entry = mongoose.model('Entry', entrySchema);

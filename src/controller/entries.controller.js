@@ -1,10 +1,13 @@
 import Entry from '../models/entries.model.js';
+import { getUserIdFromToken } from '../utils/getUserIdFromToken.js';
 
 export const getAllEntries = async (req, res) => {
   try {
-    const entries = await Entry.find();
+    const userId = getUserIdFromToken(req);
+    const entries = await Entry.find({ userId });
     res.json(entries);
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: 'Erro ao buscar entradas', error });
   }
 };
@@ -22,7 +25,8 @@ export const getEntryById = async (req, res) => {
 export const createEntry = async (req, res) => {
   try {
     const { date, category, title, value } = req.body;
-    const newEntry = new Entry({ date, category, title, value });
+    const userId = getUserIdFromToken(req);
+    const newEntry = new Entry({ date, category, title, value, userId });
     await newEntry.save();
     res.status(201).json(newEntry);
   } catch (error) {
@@ -30,13 +34,14 @@ export const createEntry = async (req, res) => {
   }
 };
 
-export const updateEntry = async (req, res) => {
+export const updateEntry = async (req, res, ) => {
     console.log(req.body)
   try {
-    const { date, category, title, value } = req.body;
+    const { date, category, title, value, } = req.body;
+    const userId = getUserIdFromToken(req);
     const updatedEntry = await Entry.findByIdAndUpdate(
       req.params.id,
-      { date, category, title, value }
+      { date, category, title, value, userId }
     );
     if (!updatedEntry) return res.status(404).json({ message: 'Entry not found' });
     res.json(updatedEntry);
